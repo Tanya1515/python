@@ -13,16 +13,17 @@ index = 0
 def make_number (calculate):
     global index
     string_num = []
-    while ((index < len(calculate)) and (calculate[index] != " ") ):
+    while ((index < len(calculate)) and (calculate[index] != "(") and (calculate[index] != ")") and ((calculate[index] not in ["*", "-", "+", "/"]))):
         string_num.append(calculate[index])
         index = index + 1
+    index = index - 1
     if "." in string_num:
         return float(''.join(string_num))
     else:
         return int(''.join(string_num))
 
 def check_operation (elem, index, calculate):
-    if ((elem == op_sub.op) and ((index == 0 ) or (calculate[index -1] == "("))):
+    if ((elem == op_sub.op) and ((index == 0 ) or (calculate[index - 1] == "("))):
         return op_un_min
     else:
         for elem_op in operations:
@@ -30,11 +31,18 @@ def check_operation (elem, index, calculate):
                 return elem_op
     return None
 
+def make_list_ok(list_1):
+    list_2 = []
+    for elem in list_1:
+        if elem != " ":
+            list_2.append(elem)
+    return list_2
+
 def convert_to_polish (calculate):
     global index
     calculate_polish = []
     s = Stack()
-    while index <= len(calculate):
+    while index < len(calculate):
         elem = calculate[index]
         if (elem == "("):
             s.push(elem)
@@ -56,7 +64,7 @@ def convert_to_polish (calculate):
                 elem_stack = s.pop()
             s.push(elem_stack)
             s.push(op_input)
-        elif (elem != " "):
+        else:
             calculate_polish.append(make_number(calculate))
         index = index + 1
     elem_stack = s.pop()
@@ -66,5 +74,5 @@ def convert_to_polish (calculate):
     return calculate_polish
 
 if __name__ == '__main__':
-    calculate = list(input())
+    calculate = make_list_ok(list(input()))
     print(convert_to_polish(calculate))
