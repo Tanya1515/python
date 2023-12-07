@@ -13,7 +13,7 @@ index = 0
 def make_number (calculate):
     global index
     string_num = []
-    while ((index < len(calculate)) and (calculate[index] != "(") and (calculate[index] != ")") and ((calculate[index] not in ["*", "-", "+", "/"]))):
+    while ((index < len(calculate)) and (calculate[index] != "(") and (calculate[index] != ")") and ((calculate[index] not in ["*", "-", "+", "/"])) and (calculate[index] != " ")):
         string_num.append(calculate[index])
         index = index + 1
     index = index - 1
@@ -33,17 +33,21 @@ def check_operation (elem, index, calculate):
 
 def make_list_ok(list_1):
     list_2 = []
-    for elem in list_1:
-        if elem != " ":
-            list_2.append(elem)
+    global index
+    while index < len(list_1):
+        elem = list_1[index]
+        if (elem != " ") :
+            if (elem not in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]):
+                list_2.append(elem)
+            else:
+                list_2.append(make_number(list_1))
+        index = index + 1
     return list_2
 
 def convert_to_polish (calculate):
-    global index
     calculate_polish = []
     s = Stack()
-    while index < len(calculate):
-        elem = calculate[index]
+    for elem in calculate:
         if (elem == "("):
             s.push(elem)
         elif (elem == ")"):
@@ -65,8 +69,7 @@ def convert_to_polish (calculate):
             s.push(elem_stack)
             s.push(op_input)
         else:
-            calculate_polish.append(make_number(calculate))
-        index = index + 1
+            calculate_polish.append(elem)
     elem_stack = s.pop()
     while (elem_stack != None):
         calculate_polish.append(elem_stack.op)
