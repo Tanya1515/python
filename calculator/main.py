@@ -1,6 +1,24 @@
 from classes import Stack
 from classes import Operation
 
+def add (a, b):
+    return a + b
+
+def mul (a, b):
+    return a * b
+
+def sub (a, b):
+    return a - b
+
+def div (a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        print("Your expression is incorrect: attempt to divide by zero!")
+
+def unary_minus (a):
+    return (-1)*a
+
 op_add = Operation("+", 0)
 op_sub = Operation("-", 0)
 op_un_min = Operation("un_min", 2)
@@ -47,6 +65,7 @@ def make_list_ok(list_1):
 def convert_to_polish (calculate):
     calculate_polish = []
     s = Stack()
+    index = 0
     for elem in calculate:
         if (elem == "("):
             s.push(elem)
@@ -58,24 +77,54 @@ def convert_to_polish (calculate):
                 while (elem_stack != "("):
                     if (elem_stack == None):
                         return "Stack is empty - your expression is incorrect: please enter correct sequence of brackets!"
-                    calculate_polish.append(elem_stack.op)
+                    calculate_polish.append(elem_stack)
                     elem_stack = s.pop()
         elif check_operation(elem, index, calculate) in operations:
             op_input = check_operation(elem, index, calculate)
             elem_stack = s.pop()
             while ((elem_stack in operations) and (elem_stack.priority >= op_input.priority)):
-                calculate_polish.append(elem_stack.op)
+                calculate_polish.append(elem_stack)
                 elem_stack = s.pop()
             s.push(elem_stack)
             s.push(op_input)
         else:
             calculate_polish.append(elem)
+        index = index + 1
     elem_stack = s.pop()
     while (elem_stack != None):
-        calculate_polish.append(elem_stack.op)
+        calculate_polish.append(elem_stack)
         elem_stack = s.pop()
     return calculate_polish
 
+def calculate_expression(polish_calculate):
+    result = 0
+    s = Stack()
+    for elem in polish_calculate:
+        if elem not in operations:
+            s.push(elem)
+        else:
+                if elem == op_add:
+                    elem_1 = s.pop()
+                    elem_2 = s.pop()
+                    s.push(add(elem_1, elem_2))
+                if elem == op_mul:
+                    elem_1 = s.pop()
+                    elem_2 = s.pop()
+                    s.push(mul(elem_1, elem_2))
+                if elem == op_un_min:
+                    elem_1 = s.pop()
+                    s.push(unary_minus(elem_1))
+                if elem == op_sub:
+                    elem_1 = s.pop()
+                    elem_2 = s.pop()
+                    s.push(sub(elem_2, elem_1))
+                if elem == op_div:
+                    elem_1 = s.pop()
+                    elem_2 = s.pop()
+                    s.push(div(elem_2, elem_1))
+    return s.pop()
+
+
 if __name__ == '__main__':
     calculate = make_list_ok(list(input()))
-    print(convert_to_polish(calculate))
+    print(calculate_expression(convert_to_polish(calculate)))
