@@ -1,5 +1,14 @@
-from classes import Stack
-from classes import Operation
+from .classes import Stack
+from .classes import Operation
+
+op_add = Operation("+", 0)
+op_sub = Operation("-", 0)
+op_un_min = Operation("un_min", 2)
+op_mul = Operation("*", 1)
+op_div = Operation("/", 1)
+
+operations = [op_add, op_sub, op_div, op_mul, op_un_min]
+index = 0
 
 def add (a, b):
     return a + b
@@ -18,15 +27,6 @@ def div (a, b):
 
 def unary_minus (a):
     return (-1)*a
-
-op_add = Operation("+", 0)
-op_sub = Operation("-", 0)
-op_un_min = Operation("un_min", 2)
-op_mul = Operation("*", 1)
-op_div = Operation("/", 1)
-
-operations = [op_add, op_sub, op_div, op_mul, op_un_min]
-index = 0
 
 def make_number (calculate):
     global index
@@ -123,8 +123,3 @@ def calculate_expression(polish_calculate):
                     elem_2 = s.pop()
                     s.push(div(elem_2, elem_1))
     return s.pop()
-
-
-if __name__ == '__main__':
-    calculate = make_list_ok(list(input()))
-    print(calculate_expression(convert_to_polish(calculate)))

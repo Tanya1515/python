@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 
 class Stack:
     def __init__(self):
