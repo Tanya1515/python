@@ -1,4 +1,4 @@
-Calculate - is a flask project, that converts the expression into polish notation and calculates it. 
+Calculator - is a flask project, that converts the expression into polish notation and calculates it. 
 
 To run the program: 
   1) Set up venv for your project and source it;
